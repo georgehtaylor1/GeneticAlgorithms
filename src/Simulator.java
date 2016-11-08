@@ -1,5 +1,6 @@
 import java.awt.Canvas;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -29,8 +30,21 @@ public class Simulator extends Canvas implements Runnable {
 		Utils.rand = new Random(1); // Use a seed to make it deterministic
 		setCreatures(new ArrayList<Creature>());
 		food = new ArrayList<Food>();
+		initEntities();
 	}
-
+	
+	/**
+	 * Initialize the set of food and creatures
+	 */
+	private void initEntities() {
+		for (int i = 0; i < getParams().getCreature_count(); i++) {
+			creatures.add(new Creature(getParams()));
+		}
+		for (int i = 0; i < getParams().getFood_count(); i++) {
+			food.add(new Food(getParams()));
+		}
+	}
+	
 	public void update() {
 
 		if (currFrame < params.getGeneration_length()) {
@@ -108,17 +122,23 @@ public class Simulator extends Canvas implements Runnable {
 
 	public void paint(Graphics g) {
 
-		g.setColor(Colors.BACKGROUND);
-		g.clearRect(0, 0, params.getWindow_width(), params.getWindow_height());
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(Colors.BACKGROUND);
+		g2.fillRect(0, 0, params.getWindow_width(), params.getWindow_height());
 		
 		for (Creature c : getCreatures()) {
-			c.draw(g);
+			c.draw(g2);
 		}
 
 		for (Food f : food) {
-			f.draw(g);
+			f.draw(g2);
 		}
-
+		
+		g2.setColor(Colors.TEXT);
+		g.drawString(Integer.toString(currRound) + " - " + Integer.toString(currFrame), 10, 10);
+		g.dispose();
+		getBufferStrategy().show();
+		
 	}
 
 	public ParameterSet getParams() {

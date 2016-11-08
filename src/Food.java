@@ -4,13 +4,13 @@ public class Food extends Entity {
 
 	public Food(ParameterSet params) {
 		super(params);
-		// TODO Auto-generated constructor stub
+		setPos(Utils.getRandomPoint(params.getWindow_width(), params.getWindow_height()));
 	}
 
 	@Override
 	public void draw(Graphics g) {
 		g.setColor(Colors.FOOD);
-		g.drawOval((int) getPos().getX() - getParams().getFood_size() / 2,
+		g.fillOval((int) getPos().getX() - getParams().getFood_size() / 2,
 				(int) getPos().getY() - getParams().getFood_size() / 2, (int) getParams().getFood_size(),
 				(int) getParams().getFood_size());
 	}

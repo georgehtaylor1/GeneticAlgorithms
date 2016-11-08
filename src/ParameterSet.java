@@ -21,7 +21,7 @@ public class ParameterSet {
 
 	public ParameterSet(int window_width, int window_height, int creature_size, int food_size, int creature_count,
 			int food_count, int creature_speed, int creature_rotationSpeed, int state_count, int view_angle,
-			int view_range) {
+			int view_range, int generation_length) {
 		this.window_width = window_width;
 		this.window_height = window_height;
 		this.creature_size = creature_size;
@@ -33,6 +33,7 @@ public class ParameterSet {
 		this.state_count = state_count;
 		this.view_angle = view_angle;
 		this.view_range = view_range;
+		this.generation_length = generation_length;
 	}
 
 	public int getWindow_width() {

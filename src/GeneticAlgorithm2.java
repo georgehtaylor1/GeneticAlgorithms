@@ -7,7 +7,13 @@ public class GeneticAlgorithm2 {
 
 	public static void main(String[] args) {
 
-		ParameterSet pset = new ParameterSet(600, 600, 10, 5, 10, 10, 2, 2, 32, 45, 50);
+		ParameterSet pset = new ParameterSet(1200, 800, 
+				20, 10, 
+				10, 20, 
+				2, 2, 
+				32, 
+				45, 200, 
+				5000);
 
 		Simulator sim = new Simulator(pset);
 		JFrame frame = new JFrame("GeneticAlgorithms2");

@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 public class Creature extends Entity {
 
@@ -11,6 +12,8 @@ public class Creature extends Entity {
 	private int[][] genes;
 	private int maxGene = 0;
 
+	private int state;
+
 	public static int FOOD_LEFT = 0;
 	public static int FOOD_RIGHT = 1;
 	public static int FOOD_NONE = 2;
@@ -18,20 +21,34 @@ public class Creature extends Entity {
 
 	private int score = 0;
 
+	/**
+	 * Creatre a new creature with the set of parameters for the simulation
+	 * 
+	 * @param params
+	 *            THe simulation parameters
+	 */
 	public Creature(ParameterSet params) {
 		super(params);
 		maxGene = (params.getState_count() * ACTION_COUNT) - 1;
 		genes = new int[params.getState_count()][PERCEPT_COUNT];
-		// TODO Auto-generated constructor stub
+
+		setPos(Utils.getRandomPoint(params.getWindow_width(), params.getWindow_height()));
+		for (int i = 0; i < params.getState_count(); i++) {
+			for (int j = 0; j < PERCEPT_COUNT; j++) {
+				genes[i][j] = Utils.rand.nextInt(maxGene);
+			}
+		}
 	}
 
 	@Override
 	public void draw(Graphics g) {
 
 		g.setColor(Colors.CREATURE);
-		g.drawOval((int) getPos().getX() - getSize() / 2, (int) getPos().getY() - getSize() / 2, getSize(), getSize());
-		int dx = (int) ((getSize() / 2 * Math.cos(Math.toRadians(angle))) + getPos().getX());
-		int dy = (int) ((getSize() / 2 * Math.sin(Math.toRadians(angle))) + getPos().getY());
+		g.drawOval((int) getPos().getX() - getParams().getCreature_size() / 2,
+				(int) getPos().getY() - getParams().getCreature_size() / 2, getParams().getCreature_size(),
+				getParams().getCreature_size());
+		int dx = (int) ((getParams().getCreature_size() / 2 * Math.cos(Math.toRadians(angle))) + getPos().getX());
+		int dy = (int) ((getParams().getCreature_size() / 2 * Math.sin(Math.toRadians(angle))) + getPos().getY());
 		g.drawLine((int) getPos().getX(), (int) getPos().getY(), dx, dy);
 
 		for (Food f : Simulator.food) {
@@ -106,8 +123,8 @@ public class Creature extends Entity {
 	 * @return The angle between the creature and the food
 	 */
 	private double getFoodAngle(Food closest) {
-		double dx1 = ((getSize() / 2) * Math.cos(Math.toRadians(angle)));
-		double dy1 = ((getSize() / 2) * Math.sin(Math.toRadians(angle)));
+		double dx1 = ((getParams().getCreature_size() / 2) * Math.cos(Math.toRadians(angle)));
+		double dy1 = ((getParams().getCreature_size() / 2) * Math.sin(Math.toRadians(angle)));
 		double dx2 = closest.getPos().getX() - getPos().getX();
 		double dy2 = closest.getPos().getY() - getPos().getY();
 		double foodAngle = Math.toDegrees(Math.atan2(dx1 * dy2 - dy1 * dx2, dx1 * dx2 + dy1 * dy2));
@@ -144,7 +161,21 @@ public class Creature extends Entity {
 	}
 
 	public void act() {
-
+		int percept = getPercept();
+		int gene = genes[state][percept];
+		state = Math.floorDiv(gene, ACTION_COUNT);
+		int action = Math.floorMod(gene, ACTION_COUNT);
+		switch (action) {
+		case 0:
+			move();
+			break;
+		case 1:
+			turn(true);
+			break;
+		case 2:
+			turn(false);
+			break;
+		}
 	}
 
 	public int getScore() {
@@ -157,7 +188,6 @@ public class Creature extends Entity {
 
 	public void eat() {
 		setScore(getScore() + 1);
-
 	}
 
 }

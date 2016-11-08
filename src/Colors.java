@@ -3,6 +3,7 @@ import java.awt.Color;
 public class Colors {
 
 	public static Color BACKGROUND = new Color(0, 0, 0);
+	public static Color TEXT = new Color(255, 255, 255);
 	public static Color CREATURE = new Color(255, 255, 255);
 	public static Color CREATURE_HOVER = new Color(103, 204, 255);
 	public static Color CREATURE_ACTIVE = new Color(77, 166, 255);
