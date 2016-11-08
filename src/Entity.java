@@ -3,15 +3,17 @@ import java.awt.geom.Point2D;
 
 public abstract class Entity {
 
+	private ParameterSet params;
 	private Point2D pos;
 	private int size;
 
-	public Entity(int size){
-		this.size = size;
+	public Entity(ParameterSet params) {
+		this.params = params;
 	}
-	
+
 	/**
 	 * Get the entities position
+	 * 
 	 * @return The position of the entity
 	 */
 	public Point2D getPos() {
@@ -20,7 +22,9 @@ public abstract class Entity {
 
 	/**
 	 * Set the position of the entity
-	 * @param pos The new position of the entity
+	 * 
+	 * @param pos
+	 *            The new position of the entity
 	 */
 	public void setPos(Point2D pos) {
 		this.pos = pos;
@@ -28,6 +32,7 @@ public abstract class Entity {
 
 	/**
 	 * Get the size of the entity
+	 * 
 	 * @return The entities size
 	 */
 	public int getSize() {
@@ -36,16 +41,28 @@ public abstract class Entity {
 
 	/**
 	 * Set the size of the entity
-	 * @param size THe new size of the entity
+	 * 
+	 * @param size
+	 *            THe new size of the entity
 	 */
 	public void setSize(int size) {
 		this.size = size;
 	}
-	
+
 	/**
 	 * Draw the entity
-	 * @param g The graphics component
+	 * 
+	 * @param g
+	 *            The graphics component
 	 */
 	public abstract void draw(Graphics g);
-	
+
+	public ParameterSet getParams() {
+		return params;
+	}
+
+	public void setParams(ParameterSet params) {
+		this.params = params;
+	}
+
 }
