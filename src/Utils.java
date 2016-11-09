@@ -38,4 +38,13 @@ public class Utils {
 		return new Point2D.Double(x, y);
 	}
 
+	public static double learnFunction(int currRound, double stretch) {
+		return Math.pow(Math.E, -(currRound / stretch));
+	}
+
+	public static double modificationFunction(int maxGene, int exponent) {
+		double r = rand.nextDouble() * 2 - 1;
+		return Math.pow(maxGene * r, exponent);
+	}
+
 }

@@ -11,7 +11,7 @@ public class Colors {
 	public static Color LEFT_VIEW = new Color(255, 255, 0); // yellow
 	public static Color DIRECT_VIEW = new Color(51, 204, 51);
 	public static Color RIGHT_VIEW = new Color(255, 0, 255); // pink
-	public static Color IN_RANGE = new Color(255, 255, 255);
+	public static Color IN_RANGE = new Color(150, 150, 150);
 
 	public static Color FOOD = new Color(255, 255, 255);
 

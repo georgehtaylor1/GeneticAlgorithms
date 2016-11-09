@@ -19,9 +19,14 @@ public class ParameterSet {
 
 	private int generation_length;
 
+	private double learning_stretch;
+	private double selection_probability;
+	private int learning_exponent;
+
 	public ParameterSet(int window_width, int window_height, int creature_size, int food_size, int creature_count,
 			int food_count, int creature_speed, int creature_rotationSpeed, int state_count, int view_angle,
-			int view_range, int generation_length) {
+			int view_range, int generation_length, double learning_stretch, double selection_probability,
+			int learning_exponent) {
 		this.window_width = window_width;
 		this.window_height = window_height;
 		this.creature_size = creature_size;
@@ -34,6 +39,9 @@ public class ParameterSet {
 		this.view_angle = view_angle;
 		this.view_range = view_range;
 		this.generation_length = generation_length;
+		this.learning_stretch = learning_stretch;
+		this.selection_probability = selection_probability;
+		this.learning_exponent = learning_exponent;
 	}
 
 	public int getWindow_width() {
@@ -130,6 +138,30 @@ public class ParameterSet {
 
 	public void setState_count(int state_count) {
 		this.state_count = state_count;
+	}
+
+	public double getLearning_stretch() {
+		return learning_stretch;
+	}
+
+	public void setLearning_stretch(double learning_stretch) {
+		this.learning_stretch = learning_stretch;
+	}
+
+	public double getSelection_probability() {
+		return selection_probability;
+	}
+
+	public void setSelection_probability(double selection_probability) {
+		this.selection_probability = selection_probability;
+	}
+
+	public int getLearning_exponent() {
+		return learning_exponent;
+	}
+
+	public void setLearning_exponent(int learning_exponent) {
+		this.learning_exponent = learning_exponent;
 	}
 
 }

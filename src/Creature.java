@@ -1,8 +1,6 @@
 import java.awt.Graphics;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
-public class Creature extends Entity {
+public class Creature extends Entity implements Cloneable {
 
 	private double angle;
 
@@ -21,6 +19,8 @@ public class Creature extends Entity {
 
 	private int score = 0;
 
+	public static double STRAIGHT_ANGLE = 5;
+
 	/**
 	 * Creatre a new creature with the set of parameters for the simulation
 	 * 
@@ -30,12 +30,12 @@ public class Creature extends Entity {
 	public Creature(ParameterSet params) {
 		super(params);
 		maxGene = (params.getState_count() * ACTION_COUNT) - 1;
-		genes = new int[params.getState_count()][PERCEPT_COUNT];
+		setGenes(new int[params.getState_count()][PERCEPT_COUNT]);
 
 		setPos(Utils.getRandomPoint(params.getWindow_width(), params.getWindow_height()));
 		for (int i = 0; i < params.getState_count(); i++) {
 			for (int j = 0; j < PERCEPT_COUNT; j++) {
-				genes[i][j] = Utils.rand.nextInt(maxGene);
+				getGenes()[i][j] = Utils.rand.nextInt(maxGene);
 			}
 		}
 	}
@@ -53,16 +53,15 @@ public class Creature extends Entity {
 
 		for (Food f : Simulator.food) {
 			if (Utils.getDistance(getPos(), f.getPos()) < getParams().getView_range()) {
-				g.setColor(Colors.IN_RANGE);
 				double foodAngle = getFoodAngle(f);
-				if (foodAngle > -getParams().getView_angle() && foodAngle < 0) {
+				if (foodAngle > -getParams().getView_angle() && foodAngle < -STRAIGHT_ANGLE) {
 					g.setColor(Colors.LEFT_VIEW);
-				}
-				if (foodAngle < getParams().getView_angle() && foodAngle > 0) {
+				} else if (foodAngle < getParams().getView_angle() && foodAngle > STRAIGHT_ANGLE) {
 					g.setColor(Colors.RIGHT_VIEW);
-				}
-				if (foodAngle == 0) {
+				} else if (foodAngle <= STRAIGHT_ANGLE && foodAngle >= -STRAIGHT_ANGLE) {
 					g.setColor(Colors.DIRECT_VIEW);
+				} else {
+					g.setColor(Colors.IN_RANGE);
 				}
 				g.drawLine((int) getPos().getX(), (int) getPos().getY(), (int) f.getPos().getX(),
 						(int) f.getPos().getY());
@@ -85,13 +84,13 @@ public class Creature extends Entity {
 
 		double foodAngle = getFoodAngle(closest);
 
-		if (foodAngle > -getParams().getView_range() && foodAngle < 0) {
+		if (foodAngle > -getParams().getView_angle() && foodAngle < -STRAIGHT_ANGLE) {
 			return FOOD_LEFT;
 		}
-		if (foodAngle < getParams().getView_range() && foodAngle > 0) {
+		if (foodAngle < getParams().getView_angle() && foodAngle > STRAIGHT_ANGLE) {
 			return FOOD_RIGHT;
 		}
-		if (foodAngle == 0) {
+		if (foodAngle <= STRAIGHT_ANGLE && foodAngle >= -STRAIGHT_ANGLE) {
 			return FOOD_STRAIGHT;
 		}
 		return FOOD_NONE;
@@ -160,10 +159,23 @@ public class Creature extends Entity {
 		}
 	}
 
+	/**
+	 * Perform an action for the creature from the current state and environment
+	 */
 	public void act() {
 		int percept = getPercept();
-		int gene = genes[state][percept];
+		assert (state <= getParams().getState_count() && state >= 0);
+		assert (percept <= PERCEPT_COUNT && percept >= 0);
+		int gene = 0;
+		try {
+			gene = getGenes()[state][percept];
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 		state = Math.floorDiv(gene, ACTION_COUNT);
+		if (state < 0) {
+			System.out.println("ERR");
+		}
 		int action = Math.floorMod(gene, ACTION_COUNT);
 		switch (action) {
 		case 0:
@@ -178,6 +190,23 @@ public class Creature extends Entity {
 		}
 	}
 
+	/**
+	 * Randomly mutate the genes
+	 * 
+	 * @param currRound
+	 *            The current round of the simulation
+	 */
+	public void mutate(int currRound) {
+		for (int i = 0; i < getParams().getState_count(); i++) {
+			for (int j = 0; j < PERCEPT_COUNT; j++) {
+				int mod = (int) Math.round(Utils.learnFunction(currRound, getParams().getLearning_stretch())
+						* Utils.modificationFunction(maxGene, getParams().getLearning_exponent()));
+				getGenes()[i][j] += mod;
+				getGenes()[i][j] = (getGenes()[i][j] + maxGene) % maxGene;
+			}
+		}
+	}
+
 	public int getScore() {
 		return score;
 	}
@@ -188,6 +217,18 @@ public class Creature extends Entity {
 
 	public void eat() {
 		setScore(getScore() + 1);
+	}
+
+	public Creature clone() throws CloneNotSupportedException {
+		return (Creature) super.clone();
+	}
+
+	public int[][] getGenes() {
+		return genes;
+	}
+
+	public void setGenes(int[][] genes) {
+		this.genes = genes;
 	}
 
 }
