@@ -166,12 +166,7 @@ public class Creature extends Entity implements Cloneable {
 		int percept = getPercept();
 		assert (state <= getParams().getState_count() && state >= 0);
 		assert (percept <= PERCEPT_COUNT && percept >= 0);
-		int gene = 0;
-		try {
-			gene = getGenes()[state][percept];
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+		int gene = getGenes()[state][percept];
 		state = Math.floorDiv(gene, ACTION_COUNT);
 		if (state < 0) {
 			System.out.println("ERR");
@@ -199,8 +194,8 @@ public class Creature extends Entity implements Cloneable {
 	public void mutate(int currRound) {
 		for (int i = 0; i < getParams().getState_count(); i++) {
 			for (int j = 0; j < PERCEPT_COUNT; j++) {
-				int mod = (int) Math.round(Utils.learnFunction(currRound, getParams().getLearning_stretch())
-						* Utils.modificationFunction(maxGene, getParams().getLearning_exponent()));
+				int mod = maxGene * (int) Math.round(Utils.learnFunction(currRound, getParams().getLearning_stretch())
+						* Utils.modificationFunction(getParams().getLearning_exponent()));
 				getGenes()[i][j] += mod;
 				getGenes()[i][j] = (getGenes()[i][j] + maxGene) % maxGene;
 			}

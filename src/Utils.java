@@ -42,9 +42,9 @@ public class Utils {
 		return Math.pow(Math.E, -(currRound / stretch));
 	}
 
-	public static double modificationFunction(int maxGene, int exponent) {
+	public static double modificationFunction(int exponent) {
 		double r = rand.nextDouble() * 2 - 1;
-		return Math.pow(maxGene * r, exponent);
+		return Math.pow(r, exponent);
 	}
 
 }
