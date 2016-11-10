@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
+import javax.swing.JFrame;
+
+import org.jfree.ui.RefineryUtilities;
+
 @SuppressWarnings("serial")
 public class Simulator extends Canvas implements Runnable, KeyListener {
 
@@ -215,7 +219,19 @@ public class Simulator extends Canvas implements Runnable, KeyListener {
 		case KeyEvent.VK_SPACE:
 			paused = !paused;
 			break;
+		case KeyEvent.VK_G:
+			graph();
+			break;
 		}
+	}
+
+	private void graph() {
+		GenerationsGraph g = new GenerationsGraph("Generation Scores", generations);
+		g.pack();
+		RefineryUtilities.centerFrameOnScreen(g);
+		g.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		g.setVisible(true);
+		
 	}
 
 	@Override

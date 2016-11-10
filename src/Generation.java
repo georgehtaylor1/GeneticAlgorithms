@@ -23,7 +23,7 @@ public class Generation {
 	 * 
 	 * @return The max score
 	 */
-	public int getmaxScore() {
+	public int getMaxScore() {
 		return creatures.get(0).getScore();
 	}
 

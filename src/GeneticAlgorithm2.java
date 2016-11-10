@@ -12,8 +12,11 @@ public class GeneticAlgorithm2 {
 
 		// Lots of creatures, more breeding, longer running, everything smaller
 		ParameterSet pset2 = new ParameterSet(1600, 1000, 10, 5, 50, 150, 3, 3, 48, 30, 150, 1000, 500.0, 0.7, 25);
+		
+		// More Food, longer burn down for alpha, slightly shorter view range!
+		ParameterSet pset3 = new ParameterSet(1600, 1000, 10, 5, 50, 400, 3, 3, 48, 30, 100, 1000, 100.0, 0.8, 25);
 
-		ParameterSet active_set = pset2;
+		ParameterSet active_set = pset3;
 		Simulator sim = new Simulator(active_set);
 		JFrame frame = new JFrame("GeneticAlgorithms2");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
